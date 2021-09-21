@@ -125,23 +125,6 @@ async function start() {
 
         const fragparts = parseQsFromFragment(window.location);
 
-        // don't try to redirect to the native apps if we're
-        // verifying a 3pid (but after we've loaded the config)
-        // or if the user is following a deep link
-        // (https://github.com/vector-im/element-web/issues/7378)
-        const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
-
-        if (!preventRedirect) {
-            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const isAndroid = /Android/.test(navigator.userAgent);
-            if (isIos || isAndroid) {
-                if (document.cookie.indexOf("element_mobile_redirect_to_guide=false") === -1) {
-                    window.location.href = "mobile_guide/";
-                    return;
-                }
-            }
-        }
-
         const loadOlmPromise = loadOlm();
         // set the platform for react sdk
         preparePlatform();
